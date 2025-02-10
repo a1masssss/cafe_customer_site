@@ -4,15 +4,11 @@ from django.http import JsonResponse
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Customer
-from django.views.generic.edit import FormMixin
-import json
+
 from .forms import CustomerForm
-from django.views.generic import ListView, DetailView
-from .forms import CustomerForm
-from django.contrib import messages
 from django.shortcuts import render
-from .forms import CustomerForm
-from .models import Customer
+from .forms import CustomerForm, MenuItemForm, OrderForm
+from .models import Customer, MenuItem, Order, OrderItem
 
 
 def customer_detail(request):
@@ -38,8 +34,9 @@ def customer_form(request, id=0):
             form = CustomerForm(request.POST, instance = customer)
         if form.is_valid():
             form.save() 
-        return redirect('/list')
-
+            return redirect('/list')
+        return render(request, 'customer_form.html', {'form': form}) 
+    
 def customer_delete(request, id):
     customer = Customer.objects.get(pk=id)
     customer.delete()
@@ -47,84 +44,85 @@ def customer_delete(request, id):
 
 
 
+# ---------------------------------Menu Item---------------------------------
+
+def menu_item_detail(request):
+    context = {'menu_item_detail_list': MenuItem.objects.all()}
+    return render(request, 'menu_item_detail.html', context)
 
 
+def menu_item_form(request, id=0):
+    if request.method == 'GET':
+        if id == 0:
+            form = MenuItemForm()
+        else:
+            menu_item = MenuItem.objects.get(pk=id)
+            form  = MenuItemForm(instance= menu_item)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# class CustomerListView(FormMixin, ListView):
-#     model = Customer
-#     template_name = 'customer_form.html'
-#     context_object_name = 'customers'
-#     form_class = CustomerForm 
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context["form"] = self.form_class()  
-#         return context
-
-#     def post(self, request, *args, **kwargs):
-
-#         form = self.get_form()
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, 'Customer created successfully')
-#             return redirect("customer_list_create")
-        
-
-#         print(f'form errors {form.errors}')
-#         messages.error(request, 'Correct the errors below')
-#         return self.get(request, *args, **kwargs)
+        return render(request, 'menu_item_form.html', {'form': form})
     
+    else: 
+        if id == 0:
+            form = MenuItemForm(request.POST)
+        else: 
+            menu_item = MenuItem.objects.get(pk=id)
+            form = MenuItemForm(request.POST, instance = menu_item)
+        if form.is_valid():
+            form.save() 
+        return redirect('/menu_item/list')
 
 
 
+def menu_item_delete(request, id):
+    menu_item = MenuItem.objects.get(pk=id)
+    menu_item.delete()
+    return redirect('/menu_item/list')
 
-# class CustomerDetailView(DetailView):
-#     model = Customer
-#     template_name = 'customer_detail.html'
-#     context_object_name = 'customer'
-#     form_class = CustomerForm
 
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context["form"] = self.form_class(instance=self.object)
-#         return context
+# ----------Orders----------------
 
-#     def post(self, request, *args, **kwargs):
-#         customer = self.get_object()
-#         form = self.form_class(request.POST, instance=customer)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('customer_list_create')
-#         return self.get(request, *args, **kwargs)
 
+def order_list(request):
+    context = {'order_list': Order.objects.all()}
+    return render(request, 'order_detail.html', context)
+
+
+def order_form(request, id=0):
+    if request.method == 'GET':
+        if id == 0:
+            form = OrderForm()
+        else:
+            order = Order.objects.get(pk=id)
+            form  = OrderForm(instance= order)
+
+        return render(request, 'order_form.html', {'form': form})
     
+    else: 
+        if id == 0:
+            form = OrderForm(request.POST)
+        else: 
+            order = Order.objects.get(pk=id)
+            form = OrderForm(request.POST, instance = order)
+        if form.is_valid():
+            form.save() 
+        return redirect('/order/list')
+
+
+
+def order_delete(request, id):
+    order = Order.objects.get(pk=id)
+    order.delete()
+    return redirect('/order/list')
+
+
+
+
+
+
+
+
+
+
+
+
+

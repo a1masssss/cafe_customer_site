@@ -3,28 +3,16 @@ from django.db.models import Sum
 import uuid
 from django.utils.text import slugify
 from django.db import models
-
-# class CustomerType(models.Model):
-#     title = models.CharField(max_length=150)
+from django.core.validators import validate_email
 
 
 class Customer(models.Model):
     name = models.CharField(max_length=30)
-    email = models.EmailField(max_length=150)
-    phone_number = models.CharField(max_length=150)
-    # type_of_customer = models.ForeignKey(CustomerType, on_delete=models.CASCADE)
+    email = models.EmailField(max_length=150, validators=[validate_email])
+    phone_number = models.CharField(max_length=17)
     created_at = models.DateTimeField(auto_now_add=True)
-
-
-
-
-
-
-
-
-
-
-
+    def __str__(self):
+        return self.name
 
 class MenuItem(models.Model):
     CATEGORY_CHOICES = [
@@ -39,6 +27,10 @@ class MenuItem(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     available = models.BooleanField(default=True)
 
+
+    def __str__(self):
+        return self.name
+    
 class Order(models.Model):
     STATUS_CHOICES = [
         ('pending', 'pending'),
@@ -50,11 +42,13 @@ class Order(models.Model):
     status = models.CharField(max_length=15, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
+    
+    def __str__(self):
+        return f"Order {self.id} - {self.customer.name}"
 
     @property
     def total_price(self):
         return self.items.aggregate(total=Sum('menuitem__price'))['total'] or 0
-
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)

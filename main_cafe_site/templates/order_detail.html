@@ -1,35 +1,36 @@
 {% extends 'base.html' %}
-
+{% block heading %}Order List{% endblock heading %}
 {% block content %}
 
 <table class="table table-borderless">
     <thead class="border-bottom font-weight-bold">
-
         <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
+            <th>Customer</th>
+            <th>Items</th>
+            <th>Status</th>
+            <th>Created Time</th>
             <th>
-                <a href="{% url 'customer_insert' %}" class="btn btn-outline-success">
-                    <i class="fas fa-plus"></i> Add New
+                <a href="{% url 'order_insert' %}" class="btn btn-outline-success">
+                    <i class="fas fa-plus"></i> Add Order
                 </a>
             </th>
         </tr>
     </thead>
     <tbody>
-        {% for customer in customer_detail_list %}
+        {% for i in order_list %}
             <tr>
-                <td>{{ customer.name }}</td>
-                <td>{{ customer.email }}</td>
-                <td>{{ customer.phone_number }}</td>
+                <td>{{ i.customer }}</td>
+                <td>{{ i.items }}</td>
+                <td>{{ i.status }}</td>
+                <td>{{ i.created_at }}</td> 
                 <td>
                     <!-- Update button -->
-                    <a href="{% url 'customer_update' customer.id %}" class="btn text-secondary px-0">
+                    <a href="{% url 'order_update' i.id %}" class="btn text-secondary px-0">
                         <i class="far fa-edit fa-lg"></i>
                     </a>
-    
+                    
                     <!-- Delete form -->
-                    <form action="{% url 'customer_delete' customer.id %}" method="post" class="d-inline">
+                    <form action="{% url 'order_delete' i.id %}" method="post" class="d-inline">
                         {% csrf_token %}
                         <button type="submit" class="btn text-danger px-0">
                             <i class="far fa-trash-alt fa-lg"></i>

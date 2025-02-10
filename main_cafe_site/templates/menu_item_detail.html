@@ -1,35 +1,38 @@
 {% extends 'base.html' %}
-
+{% block heading %}Menu List{% endblock heading %}
 {% block content %}
 
 <table class="table table-borderless">
     <thead class="border-bottom font-weight-bold">
-
         <tr>
             <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Categoty</th>
+            <th>Avalable</th>
             <th>
-                <a href="{% url 'customer_insert' %}" class="btn btn-outline-success">
-                    <i class="fas fa-plus"></i> Add New
+                <a href="{% url 'menu_item_insert' %}" class="btn btn-outline-success">
+                    <i class="fas fa-plus"></i> Add Menu Item
                 </a>
             </th>
         </tr>
     </thead>
     <tbody>
-        {% for customer in customer_detail_list %}
+        {% for item in menu_item_detail_list %}
             <tr>
-                <td>{{ customer.name }}</td>
-                <td>{{ customer.email }}</td>
-                <td>{{ customer.phone_number }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.price }}</td>
+                <td>{{ item.category }}</td>
+                <td>{{ item.available }}</td>
                 <td>
                     <!-- Update button -->
-                    <a href="{% url 'customer_update' customer.id %}" class="btn text-secondary px-0">
+                    <a href="{% url 'menu_item_update' item.id %}" class="btn text-secondary px-0">
                         <i class="far fa-edit fa-lg"></i>
                     </a>
     
                     <!-- Delete form -->
-                    <form action="{% url 'customer_delete' customer.id %}" method="post" class="d-inline">
+                    <form action="{% url 'menu_item_delete' item.id %}" method="post" class="d-inline">
                         {% csrf_token %}
                         <button type="submit" class="btn text-danger px-0">
                             <i class="far fa-trash-alt fa-lg"></i>

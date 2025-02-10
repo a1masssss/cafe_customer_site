@@ -1,11 +1,8 @@
 {% extends "base.html" %}
-
-
+{% block heading %}Order{% endblock heading %}
 {% load crispy_forms_tags %}
 
-
 {% block content %}
-
 <form action="" method="post" autocomplete="off">
     {% csrf_token %}
     {{form|crispy}}
@@ -17,7 +14,7 @@
             </button>
         </div>
         <div class="col-md-4">
-            <a href="{% url 'customer_list' %}" class="btn btn-secondary btn-block btn-lg">
+            <a href="{% url 'order_list' %}" class="btn btn-secondary btn-block btn-lg">
                 <i class="fas fa-stream"></i> Back to list
             </a>
         </div>
