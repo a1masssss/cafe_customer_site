@@ -43,6 +43,14 @@ def customer_delete(request, id):
     return redirect('/list')
 
 
+def search_customers(request):
+    """AJAX search for customers."""
+    query = request.GET.get('q', '')
+    customers = Customer.objects.filter(name__icontains=query) if query else Customer.objects.all()
+    return render(request, 'partials/customer_list_partial.html', {'': customers})
+
+
+
 
 # ---------------------------------Menu Item---------------------------------
 
@@ -77,6 +85,11 @@ def menu_item_delete(request, id):
     menu_item = MenuItem.objects.get(pk=id)
     menu_item.delete()
     return redirect('/menu_item/list')
+def search_menu_items(request):
+    """AJAX search for menu items."""
+    query = request.GET.get('q', '')
+    menu_items = MenuItem.objects.filter(name__icontains=query) if query else MenuItem.objects.all()
+    return render(request, 'partials/menu_list_partial.html', {'menu_item': menu_items})
 
 
 # ----------Orders----------------
@@ -108,21 +121,12 @@ def order_form(request, id=0):
         return redirect('/order/list')
 
 
-
 def order_delete(request, id):
     order = Order.objects.get(pk=id)
     order.delete()
     return redirect('/order/list')
 
-
-
-
-
-
-
-
-
-
-
-
-
+def search_orders(request):
+    query = request.GET.get('q', '')
+    orders = Order.objects.filter(customer__name__icontains=query) if query else Order.objects.all()
+    return render(request, 'partials/order_list_partial.html', {'order_list': orders})

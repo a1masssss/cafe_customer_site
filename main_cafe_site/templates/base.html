@@ -8,21 +8,87 @@
     <title>Customer Register</title>
 </head>
 <body>
-    <div class="container">
-        <div class="col-md-10 offset-md-1 mt-5">
-            <div class="jumbotron">
-                <h1 class="display-4">{% block heading %}Customer Register{% endblock heading %}</h1>
-                <p class="lead">Outpeer Django Project</p>
-                <hr class="my-4">
-                {% block content %}
-                {% endblock content %}      
-              </div>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'customer_list' %}">Customer List</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'menu_item_list' %}">Menu List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'order_list' %}">Order List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" aria-disabled="true">Login</a>
+                    </li>
+                </ul>
+                <!-- ✅ Fixed: Added id="search-form" -->
+                <form id="search-form" class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" id="search-input" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
         </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 offset-md-1 mt-5">
+                <div class="jumbotron">
+                    <h1 class="display-4">{% block heading %}Customer Register{% endblock heading %}</h1>
+                    <p class="lead">Outpeer Django Project</p>
+                    <hr class="my-4">
+                    {% block content %}
+                    {% endblock content %}
+                </div>
+            </div>
+        </div>
+
+        <!-- ✅ Fixed: Added a container for search results -->
+        <div id="list-container" class="mt-4"></div>
     </div>
 
-    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchInput = document.getElementById("search-input");
+            const searchForm = document.getElementById("search-form");
+            const listContainer = document.getElementById("list-container");
+
+            if (searchInput && searchForm && listContainer) {
+                searchForm.addEventListener("submit", function (event) {
+                    event.preventDefault();  // Prevent page reload on form submission
+
+                    let query = searchInput.value.trim();
+                    let currentPage = window.location.pathname;
+                    let searchUrl = '';
+
+                    if (currentPage.includes('/list')) {
+                        searchUrl = "/search/";
+                    } else if (currentPage.includes('/menu_item/list')) {
+                        searchUrl = "/menu_item/search/";
+                    } else if (currentPage.includes('/order/list')) {
+                        searchUrl = "/order/search/";
+                    }
+
+                    if (searchUrl) {
+                        fetch(searchUrl + "?q=" + encodeURIComponent(query), { method: "GET" })
+                            .then(response => response.text())
+                            .then(data => {
+                                listContainer.innerHTML = data; // ✅ Updates search results
+                            })
+                            .catch(error => console.error("Error fetching data:", error));
+                    }
+                });
+            }
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 </html>
