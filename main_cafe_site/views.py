@@ -1,14 +1,47 @@
 from collections import UserString
+from django.forms import model_to_dict
+from rest_framework.response import Response
 from django.shortcuts import get_object_or_404, render, HttpResponseRedirect, redirect
 from django.http import JsonResponse
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Customer
-
+from rest_framework import generics
 from .forms import CustomerForm
 from django.shortcuts import render
 from .forms import CustomerForm, MenuItemForm, OrderForm
 from .models import Customer, MenuItem, Order, OrderItem
+from .serializer import CustomerSerializer
+from rest_framework.views import APIView
+
+class CustomerAPIView(APIView):
+    def get(self, request):
+        w = Customer.objects.all()
+        return Response({'customers': CustomerSerializer(w, many = True).data})
+
+    def post(self, request):
+        serializer = CustomerSerializer(data = request.data)  # проверка на валидность данных 
+        serializer.is_valid(raise_exception = True)  # проверка на валидность данных 
+        new_customer = Customer.objects.create(
+            name = request.data['name'], 
+            email = request.data['email'], 
+            phone_number = request.data['phone_number'], 
+        )
+        return Response({'customer': CustomerSerializer(new_customer).data})
+    
+
+
+
+
+
+
+
+
+
+# class CustomerAPIView(generics.ListAPIView):
+#     queryset = Customer.objects.all()
+#     serializer_class = CustomerSerializer
+
 
 
 def customer_detail(request):
