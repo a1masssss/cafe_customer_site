@@ -23,6 +23,13 @@ class CustomerSerializer(serializers.Serializer):
     phone_number =serializers.CharField(max_length = 17)
     created_at  = serializers.DateTimeField(read_only = True)
     
+    def create(self, validated_data):
+        return Customer.objects.create(**validated_data)
+    
+    def update(self, instance, validated_data):
+        return super().update(instance, validated_data)
+
+
 
 
 

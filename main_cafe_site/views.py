@@ -21,13 +21,37 @@ class CustomerAPIView(APIView):
 
     def post(self, request):
         serializer = CustomerSerializer(data = request.data)  # проверка на валидность данных 
-        serializer.is_valid(raise_exception = True)  # проверка на валидность данных 
-        new_customer = Customer.objects.create(
-            name = request.data['name'], 
-            email = request.data['email'], 
-            phone_number = request.data['phone_number'], 
-        )
-        return Response({'customer': CustomerSerializer(new_customer).data})
+        serializer.is_valid(raise_exception = True) 
+        serializer.save() 
+
+        return Response({'customer': serializer.data})
+    
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+        if not pk: 
+            return Response({"error": "Method PUT is not allowed"})
+        
+        try:
+            instance = Customer.objects.get(pk=pk)
+        except:
+            return Response({'error': "Object does not exist"})
+        
+
+        serializer  = CustomerSerializer(data=request.data, instance = instance)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'customer': serializer.data})
+    
+    def delete(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+        if not pk:
+            return Response({"error": "Method DELETE is not allowed"})
+        
+
+
+
+
+        return Response({"cusotomer": "delete post" + str(pk)})
     
 
 

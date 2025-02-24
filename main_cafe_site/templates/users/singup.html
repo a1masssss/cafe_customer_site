@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+{% block heading %}Registration{% endblock heading %}
+{% block content %}
+
+<form action="" method="post" autocomplete="off">
+    {% csrf_token %}
+    {{form|crispy}}
+    <div class="row">
+        <div class="col-md-8">
+            <button type="submit" class="btn btn-success btn-block btn-lg">
+                <i ></i>
+                Sign Up
+            </button>
+        </div>
+        <div class="col-md-4">
+        </div>
+    </div>
+    
+    
+</form>
+{% endblock %}

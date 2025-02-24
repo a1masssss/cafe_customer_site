@@ -21,5 +21,7 @@ from main_cafe_site.views import CustomerAPIView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main_cafe_site.urls')),
-    path('api/v1/customerlist', CustomerAPIView.as_view())
+    path('api/v1/customerlist', CustomerAPIView.as_view()), 
+    path('api/v1/customerlist<int:pk>', CustomerAPIView.as_view()), 
+    path('users/', include('users.urls')),
 ]

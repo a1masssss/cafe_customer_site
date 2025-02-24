@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "crispy_bootstrap4",
     'crispy_forms',
     'rest_framework', 
+    'users',
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4' 
 
@@ -120,6 +121,8 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+AUTH_USER_MODEL = 'users.CustomUser'
 
 
 # Static files (CSS, JavaScript, Images)
