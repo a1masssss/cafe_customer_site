@@ -1,22 +1,27 @@
-{% extends "base.html" %}
-
+{% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block heading %}Registration{% endblock heading %}
 {% block content %}
 
+{% block navbar %}
+<!-- here do not display navbar -->
+{% endblock navbar %}
 <form action="" method="post" autocomplete="off">
     {% csrf_token %}
     {{form|crispy}}
     <div class="row">
-        <div class="col-md-8">
-            <button type="submit" class="btn btn-success btn-block btn-lg">
-                <i ></i>
+        <div class="col-md-8 d-flex gap-2">
+            <!-- Sign Up button -->
+            <button type="submit" class="btn btn-success btn-lg">
                 Sign Up
             </button>
+    
+            <!-- Login button -->
+            <a class="btn btn-primary btn-lg" href="{% url 'login' %}">
+                Login
+            </a>
         </div>
-        <div class="col-md-4">
-        </div>
-    </div>
+    </div>     
     
     
 </form>

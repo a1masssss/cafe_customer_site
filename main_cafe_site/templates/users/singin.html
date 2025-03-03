@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block heading %}Please Log In{% endblock heading %}
+{% block content %}
+
+{% block navbar %}
+<!-- here do not display navbar -->
+{% endblock navbar %}
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{form|crispy}}
+    <div class="d-flex gap-2">
+        <!-- Sign In button -->
+        <button class="w-100 btn btn-lg btn-primary" type="submit">
+            Sign in
+        </button>
+    
+        <!-- Register button (styled as a button) -->
+        <a href="{% url 'singup' %}" class="w-100 btn btn-lg btn-outline-primary text-center">
+            Register
+        </a>
+    </div>
+</form>
+
+{% endblock %}

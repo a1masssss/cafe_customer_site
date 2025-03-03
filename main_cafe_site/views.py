@@ -48,9 +48,6 @@ class CustomerAPIView(APIView):
             return Response({"error": "Method DELETE is not allowed"})
         
 
-
-
-
         return Response({"cusotomer": "delete post" + str(pk)})
     
 

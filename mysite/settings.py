@@ -124,6 +124,16 @@ USE_TZ = True
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
+# STATIC_URL = 'static'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #outpust in the console
+
+
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_POST = 587
+# EMAIL_USE_TLS = True #  шифрование  
+# EMAIL_HOST_USER = 'example@mail.ru'
+# EMAIL_HOST_USER = 'example_pass'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
